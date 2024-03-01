@@ -31,6 +31,10 @@ class My_App(tk.Frame):
         self.create_pager()
         self.pages[self.current_page_index]()
 
+    def clear_frame(self,frame):
+        for child in frame.winfo_children():
+            child.destroy()
+
     def create_page_container(self):
         self.page_container=tk.Frame(
             self.main_frame,
@@ -56,6 +60,30 @@ class My_App(tk.Frame):
         self.pager.grid(column=0,row=1,sticky=tk.NS)
         self.pager.grid_propagate(0)
 
+        def change_page(button):
+            self.clear_frame(self.page_container)
+
+            match button :
+                case 'Previous':
+                    self.current_page_index -=1
+                    self.pages[self.current_page_index]()
+                case 'Next':
+                    self.current_page_index +=1
+                    self.pages[self.current_page_index]()
+
+            if self.current_page_index ==0 :
+                prev_button.config(state=tk.DISABLED) 
+            else:
+                prev_button.config(state=tk.ACTIVE) 
+
+            if self.current_page_index ==len(self.pages)-1 :
+                next_button.config(state=tk.DISABLED) 
+            else:
+                next_button.config(state=tk.ACTIVE)       
+
+            self.page_number['text']= f'{self.current_page_index+1}/{len(self.pages)}'
+        
+
         prev_button=tk.Button(
             self.pager,
             background=self.color2,
@@ -68,8 +96,9 @@ class My_App(tk.Frame):
             relief=tk.FLAT,
             font=('Arial',18),
             cursor='hand1',
-            text='Prevous',
+            text='Previous',
             state=tk.DISABLED,
+            command=lambda button='Previous':change_page(button)
         )
         prev_button.grid(column=0,row=0)
 
@@ -78,6 +107,7 @@ class My_App(tk.Frame):
             background=self.color1,
             foreground=self.color3,
             font=('Arial',18),
+            text=f'{self.current_page_index+1}/{len(self.pages)}'
 
         )
         self.page_number.grid(column=1,row=0)
@@ -95,6 +125,7 @@ class My_App(tk.Frame):
             font=('Arial',18),
             cursor='hand1',
             text='Next',
+             command=lambda button='Next':change_page(button)
            
         )
         next_button.grid(column=2,row=0)

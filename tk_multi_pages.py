@@ -20,6 +20,7 @@ class My_App(tk.Frame):
         super().__init__(root,bg=self.color1 )
 
         self.main_frame=self
+        
         self.main_frame.pack(fill=tk.BOTH,expand=True)
         self.main_frame.columnconfigure(0,weight=1)
         self.main_frame.rowconfigure(0,weight=1)
@@ -267,7 +268,7 @@ class My_App(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
 
-    root.title='Multi page app'
+    root.title('Multi page app')
     root.geometry('700x500')
     root.resizable(width=False,height=False)
 
